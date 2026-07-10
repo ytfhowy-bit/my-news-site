@@ -1,0 +1,1134 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پورتال خبری</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@200;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --purple-deep: #1a0a2e;
+            --purple-dark: #2d1150;
+            --purple-mid: #6b21a8;
+            --purple-light: #a855f7;
+            --purple-glow: #c084fc;
+            --yellow-accent: #facc15;
+            --yellow-bright: #fde047;
+            --yellow-warm: #eab308;
+            --card-bg: rgba(45, 17, 80, 0.6);
+            --card-border: rgba(168, 85, 247, 0.25);
+            --text-primary: #f3e8ff;
+            --text-muted: #c4b5d4;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: var(--purple-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* === پس‌زمینه متحرک === */
+        .bg-scene {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.35;
+            animation: blobFloat 12s ease-in-out infinite alternate;
+        }
+
+        .bg-blob-1 {
+            width: 500px; height: 500px;
+            background: var(--purple-mid);
+            top: -10%; right: -5%;
+            animation-delay: 0s;
+        }
+
+        .bg-blob-2 {
+            width: 400px; height: 400px;
+            background: var(--yellow-accent);
+            bottom: -15%; left: -10%;
+            animation-delay: -4s;
+            opacity: 0.18;
+        }
+
+        .bg-blob-3 {
+            width: 350px; height: 350px;
+            background: var(--purple-light);
+            top: 50%; left: 40%;
+            animation-delay: -8s;
+            opacity: 0.2;
+        }
+
+        @keyframes blobFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, -30px) scale(1.1); }
+            100% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        /* === ذرات شناور === */
+        .particles-container {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px; height: 3px;
+            background: var(--yellow-accent);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleRise linear infinite;
+        }
+
+        @keyframes particleRise {
+            0% { opacity: 0; transform: translateY(100vh) scale(0); }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.3; }
+            100% { opacity: 0; transform: translateY(-10vh) scale(1.2); }
+        }
+
+        /* === نوار بالایی === */
+        .top-bar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(26, 10, 46, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
+            transition: box-shadow 0.3s;
+        }
+
+        .top-bar.scrolled {
+            box-shadow: 0 4px 30px rgba(107, 33, 168, 0.3);
+        }
+
+        .logo-text {
+            background: linear-gradient(135deg, var(--yellow-bright), var(--yellow-warm));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            font-size: 1.5rem;
+        }
+
+        /* === دکمه‌ها === */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--purple-mid), var(--purple-light));
+            color: white;
+            padding: 10px 24px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Vazirmatn';
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--yellow-accent), var(--yellow-bright));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn-primary:hover::before { opacity: 1; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(250, 204, 21, 0.3); }
+        .btn-primary span { position: relative; z-index: 1; }
+
+        .btn-yellow {
+            background: linear-gradient(135deg, var(--yellow-warm), var(--yellow-accent));
+            color: var(--purple-deep);
+            padding: 10px 24px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Vazirmatn';
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .btn-yellow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(250, 204, 21, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Vazirmatn';
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .btn-danger:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--purple-light);
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--purple-light);
+            cursor: pointer;
+            font-family: 'Vazirmatn';
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            background: var(--purple-light);
+            color: white;
+        }
+
+        /* === کارت‌ها === */
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--yellow-accent);
+            box-shadow: 0 20px 50px rgba(168, 85, 247, 0.2), 0 0 0 1px rgba(250, 204, 21, 0.1);
+        }
+
+        /* === ورودی‌ها === */
+        .input-field {
+            width: 100%;
+            background: rgba(26, 10, 46, 0.8);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-family: 'Vazirmatn';
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--yellow-accent);
+            box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.15);
+        }
+
+        .input-field::placeholder { color: var(--text-muted); opacity: 0.5; }
+
+        textarea.input-field { resize: vertical; min-height: 100px; }
+
+        /* === هیرو === */
+        .hero-section {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, var(--yellow-bright), var(--yellow-warm), var(--yellow-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            max-width: 550px;
+            margin: 0 auto 2rem;
+        }
+
+        /* === آیکون شبکه‌های اجتماعی === */
+        .social-icon {
+            width: 60px; height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-icon::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-6px) scale(1.1);
+        }
+
+        .social-youtube {
+            background: rgba(255, 0, 0, 0.15);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #ff4444;
+        }
+        .social-youtube:hover { background: rgba(255, 0, 0, 0.3); box-shadow: 0 8px 30px rgba(255, 0, 0, 0.3); }
+
+        .social-telegram {
+            background: rgba(0, 136, 204, 0.15);
+            border: 1px solid rgba(0, 136, 204, 0.3);
+            color: #0088cc;
+        }
+        .social-telegram:hover { background: rgba(0, 136, 204, 0.3); box-shadow: 0 8px 30px rgba(0, 136, 204, 0.3); }
+
+        .social-instagram {
+            background: linear-gradient(135deg, rgba(131, 58, 180, 0.15), rgba(253, 29, 29, 0.15), rgba(252, 176, 69, 0.15));
+            border: 1px solid rgba(253, 29, 29, 0.3);
+            color: #e1306c;
+        }
+        .social-instagram:hover { background: linear-gradient(135deg, rgba(131, 58, 180, 0.3), rgba(253, 29, 29, 0.3), rgba(252, 176, 69, 0.3)); box-shadow: 0 8px 30px rgba(225, 48, 108, 0.3); }
+
+        /* === کارت خبر === */
+        .news-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 4px; height: 0;
+            background: linear-gradient(to bottom, var(--yellow-accent), var(--purple-light));
+            border-radius: 0 20px 20px 0;
+            transition: height 0.5s;
+        }
+
+        .news-card:hover::before { height: 100%; }
+
+        .news-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(250, 204, 21, 0.15);
+            color: var(--yellow-accent);
+            border: 1px solid rgba(250, 204, 21, 0.2);
+        }
+
+        .news-date {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* === مودال === */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 4, 20, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-box {
+            background: var(--purple-dark);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 440px;
+            width: 100%;
+            animation: modalIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.85) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* === پنل مدیریت === */
+        .admin-panel {
+            display: none;
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .admin-panel.active { display: block; }
+
+        .main-site { position: relative; z-index: 10; }
+        .main-site.hidden { display: none; }
+
+        .admin-sidebar-item {
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .admin-sidebar-item:hover,
+        .admin-sidebar-item.active {
+            background: rgba(250, 204, 21, 0.1);
+            color: var(--yellow-accent);
+        }
+
+        .admin-tab { display: none; }
+        .admin-tab.active { display: block; }
+
+        /* === تست === */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--purple-dark);
+            border: 1px solid var(--yellow-accent);
+            color: var(--text-primary);
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-family: 'Vazirmatn';
+            font-weight: 700;
+            z-index: 999;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* === خط جداکننده طلایی === */
+        .gold-divider {
+            height: 2px;
+            background: linear-gradient(to left, transparent, var(--yellow-accent), transparent);
+            border: none;
+            margin: 0;
+            opacity: 0.4;
+        }
+
+        /* === اسکرول بار === */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--purple-deep); }
+        ::-webkit-scrollbar-thumb {
+            background: var(--purple-mid);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--purple-light); }
+
+        /* === فوتر === */
+        .footer-section {
+            border-top: 1px solid var(--card-border);
+            background: rgba(26, 10, 46, 0.9);
+        }
+
+        /* === انیمیشن ورود === */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === ریسپانسیو === */
+        @media (max-width: 768px) {
+            .admin-layout { flex-direction: column !important; }
+            .admin-sidebar { width: 100% !important; min-height: auto !important; flex-direction: row !important; overflow-x: auto; padding: 12px !important; }
+            .admin-sidebar-item { white-space: nowrap; font-size: 0.85rem; padding: 8px 14px; }
+            .admin-content { padding: 16px !important; }
+            .social-icons-row { gap: 12px !important; }
+            .social-icon { width: 50px; height: 50px; font-size: 1.2rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* === شمارنده === */
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--yellow-bright), var(--yellow-warm));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- پس‌زمینه متحرک -->
+    <div class="bg-scene">
+        <div class="bg-blob bg-blob-1"></div>
+        <div class="bg-blob bg-blob-2"></div>
+        <div class="bg-blob bg-blob-3"></div>
+    </div>
+
+    <!-- ذرات شناور -->
+    <div class="particles-container" id="particles"></div>
+
+    <!-- نوار بالایی -->
+    <header class="top-bar" id="topBar">
+        <div style="max-width:1200px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg, var(--yellow-accent), var(--yellow-warm)); display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-bolt" style="color:var(--purple-deep); font-size:1.1rem;"></i>
+                </div>
+                <span class="logo-text">پورتال خبری</span>
+            </div>
+            <nav style="display:flex; align-items:center; gap:16px;">
+                <button class="btn-outline" onclick="scrollToSection('newsSection')" id="navNewsBtn" style="font-size:0.85rem;">
+                    <i class="fas fa-newspaper" style="margin-left:6px;"></i>اخبار
+                </button>
+                <button class="btn-outline" onclick="scrollToSection('socialSection')" id="navSocialBtn" style="font-size:0.85rem;">
+                    <i class="fas fa-share-alt" style="margin-left:6px;"></i>شبکه‌های اجتماعی
+                </button>
+                <button class="btn-primary" onclick="showLoginModal()" id="adminBtn" style="font-size:0.85rem; padding:8px 18px;">
+                    <span><i class="fas fa-lock" style="margin-left:6px;"></i>مدیریت</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ===== بخش اصلی سایت ===== -->
+    <main class="main-site" id="mainSite">
+
+        <!-- هیرو -->
+        <section class="hero-section" style="padding-top:80px;">
+            <div style="padding:0 24px; max-width:800px;">
+                <div class="fade-up" style="margin-bottom:24px;">
+                    <span class="news-badge" style="font-size:0.9rem; padding:6px 18px;">
+                        <i class="fas fa-fire" style="margin-left:6px;"></i>به‌روزترین اخبار
+                    </span>
+                </div>
+                <h1 class="hero-title fade-up" style="transition-delay:0.1s;">
+                    آخرین اخبار را<br>
+                    <span class="highlight">همین الان</span> دنبال کن
+                </h1>
+                <p class="hero-subtitle fade-up" style="transition-delay:0.2s;">
+                    با ما همراه شوید و از جدیدترین اخبار، تحلیل‌ها و رویدادهای مهم روز مطلع شوید
+                </p>
+                <div class="fade-up" style="transition-delay:0.3s; display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+                    <button class="btn-yellow" onclick="scrollToSection('newsSection')" style="padding:14px 32px; font-size:1rem;">
+                        <i class="fas fa-arrow-down" style="margin-left:8px;"></i>مشاهده اخبار
+                    </button>
+                    <button class="btn-primary" onclick="scrollToSection('socialSection')" style="padding:14px 32px; font-size:1rem;">
+                        <span><i class="fas fa-users" style="margin-left:8px;"></i>ما را دنبال کنید</span>
+                    </button>
+                </div>
+
+                <!-- آمار -->
+                <div class="fade-up" style="transition-delay:0.4s; display:flex; gap:40px; justify-content:center; margin-top:60px; flex-wrap:wrap;">
+                    <div style="text-align:center;">
+                        <div class="stat-number" id="statNews">0</div>
+                        <div style="color:var(--text-muted); font-size:0.9rem; margin-top:4px;">خبر منتشر شده</div>
+                    </div>
+                    <div style="text-align:center;">
+                        <div class="stat-number">3</div>
+                        <div style="color:var(--text-muted); font-size:0.9rem; margin-top:4px;">شبکه اجتماعی</div>
+                    </div>
+                    <div style="text-align:center;">
+                        <div class="stat-number">24/7</div>
+                        <div style="color:var(--text-muted); font-size:0.9rem; margin-top:4px;">بروزرسانی</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="gold-divider">
+
+        <!-- بخش اخبار -->
+        <section id="newsSection" style="max-width:1200px; margin:0 auto; padding:80px 24px;">
+            <div class="fade-up" style="text-align:center; margin-bottom:50px;">
+                <span class="news-badge" style="margin-bottom:12px; display:inline-block;">
+                    <i class="fas fa-rss" style="margin-left:6px;"></i>بخش اخبار
+                </span>
+                <h2 style="font-size:2.2rem; font-weight:900; margin-top:10px;">آخرین اخبار</h2>
+                <p style="color:var(--text-muted); margin-top:10px;">جدیدترین رویدادها و اخبار روز را اینجا دنبال کنید</p>
+            </div>
+
+            <div id="newsContainer" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(340px, 1fr)); gap:24px;">
+                <!-- اخبار اینجا لود می‌شن -->
+            </div>
+
+            <div id="noNewsMsg" style="display:none; text-align:center; padding:60px 20px;">
+                <i class="fas fa-inbox" style="font-size:3rem; color:var(--purple-mid); margin-bottom:16px;"></i>
+                <p style="color:var(--text-muted); font-size:1.1rem;">هنوز خبری منتشر نشده است</p>
+            </div>
+        </section>
+
+        <hr class="gold-divider">
+
+        <!-- بخش شبکه‌های اجتماعی -->
+        <section id="socialSection" style="max-width:800px; margin:0 auto; padding:80px 24px; text-align:center;">
+            <div class="fade-up">
+                <span class="news-badge" style="margin-bottom:12px; display:inline-block;">
+                    <i class="fas fa-globe" style="margin-left:6px;"></i>شبکه‌های اجتماعی
+                </span>
+                <h2 style="font-size:2.2rem; font-weight:900; margin-top:10px;">ما را دنبال کنید</h2>
+                <p style="color:var(--text-muted); margin-top:10px; margin-bottom:40px;">از طریق شبکه‌های اجتماعی با ما در ارتباط باشید</p>
+            </div>
+
+            <div class="fade-up social-icons-row" style="display:flex; justify-content:center; gap:24px; flex-wrap:wrap;">
+                <a href="#" id="socialYoutube" target="_blank" class="social-icon social-youtube" title="یوتیوب" aria-label="کانال یوتیوب">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="#" id="socialTelegram" target="_blank" class="social-icon social-telegram" title="تلگرام" aria-label="کانال تلگرام">
+                    <i class="fab fa-telegram-plane"></i>
+                </a>
+                <a href="#" id="socialInstagram" target="_blank" class="social-icon social-instagram" title="اینستاگرام" aria-label="پیج اینستاگرام">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+
+            <div class="fade-up" style="margin-top:30px; display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+                <div style="display:flex; align-items:center; gap:8px; color:var(--text-muted); font-size:0.9rem;">
+                    <i class="fab fa-youtube" style="color:#ff4444;"></i>
+                    <span>یوتیوب</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; color:var(--text-muted); font-size:0.9rem;">
+                    <i class="fab fa-telegram-plane" style="color:#0088cc;"></i>
+                    <span>تلگرام</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; color:var(--text-muted); font-size:0.9rem;">
+                    <i class="fab fa-instagram" style="color:#e1306c;"></i>
+                    <span>اینستاگرام</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- فوتر -->
+        <footer class="footer-section" style="padding:40px 24px; text-align:center;">
+            <div style="max-width:1200px; margin:0 auto;">
+                <div class="logo-text" style="font-size:1.3rem; margin-bottom:12px;">پورتال خبری</div>
+                <p style="color:var(--text-muted); font-size:0.9rem;">تمامی حقوق محفوظ است</p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- ===== پنل مدیریت ===== -->
+    <div class="admin-panel" id="adminPanel">
+        <div style="max-width:1200px; margin:0 auto; padding:20px 24px;">
+            <!-- هدر پنل -->
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:30px; flex-wrap:wrap; gap:12px;">
+                <div>
+                    <h1 style="font-size:1.8rem; font-weight:900;">
+                        <i class="fas fa-cog" style="color:var(--yellow-accent); margin-left:10px;"></i>پنل مدیریت
+                    </h1>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-top:4px;">مدیریت لینک‌ها و اخبار سایت</p>
+                </div>
+                <button class="btn-outline" onclick="exitAdmin()" style="font-size:0.9rem;">
+                    <i class="fas fa-sign-out-alt" style="margin-left:6px;"></i>بازگشت به سایت
+                </button>
+            </div>
+
+            <div class="admin-layout" style="display:flex; gap:24px;">
+                <!-- سایدبار -->
+                <aside class="admin-sidebar" style="width:240px; min-height:500px; background:var(--card-bg); border:1px solid var(--card-border); border-radius:20px; padding:20px 12px; display:flex; flex-direction:column; gap:6px; flex-shrink:0;">
+                    <div class="admin-sidebar-item active" onclick="switchTab('socialTab', this)">
+                        <i class="fas fa-link" style="width:20px; text-align:center;"></i>
+                        لینک شبکه‌ها
+                    </div>
+                    <div class="admin-sidebar-item" onclick="switchTab('newsTab', this)">
+                        <i class="fas fa-newspaper" style="width:20px; text-align:center;"></i>
+                        مدیریت اخبار
+                    </div>
+                </aside>
+
+                <!-- محتوا -->
+                <div class="admin-content" style="flex:1; min-width:0;">
+
+                    <!-- تب لینک شبکه‌ها -->
+                    <div class="admin-tab active" id="socialTab">
+                        <div class="glass-card" style="padding:32px; cursor:default;" onmouseenter="this.style.transform='none'" onmouseleave="this.style.transform='none'">
+                            <h2 style="font-size:1.3rem; font-weight:900; margin-bottom:24px;">
+                                <i class="fas fa-share-nodes" style="color:var(--yellow-accent); margin-left:10px;"></i>تنظیم لینک شبکه‌های اجتماعی
+                            </h2>
+
+                            <div style="display:flex; flex-direction:column; gap:20px;">
+                                <div>
+                                    <label style="display:flex; align-items:center; gap:8px; margin-bottom:8px; font-weight:700; font-size:0.95rem;">
+                                        <i class="fab fa-youtube" style="color:#ff4444;"></i>
+                                        لینک کانال یوتیوب
+                                    </label>
+                                    <input type="url" class="input-field" id="inputYoutube" placeholder="https://youtube.com/@channel" dir="ltr">
+                                </div>
+
+                                <div>
+                                    <label style="display:flex; align-items:center; gap:8px; margin-bottom:8px; font-weight:700; font-size:0.95rem;">
+                                        <i class="fab fa-telegram-plane" style="color:#0088cc;"></i>
+                                        لینک کانال تلگرام
+                                    </label>
+                                    <input type="url" class="input-field" id="inputTelegram" placeholder="https://t.me/channel" dir="ltr">
+                                </div>
+
+                                <div>
+                                    <label style="display:flex; align-items:center; gap:8px; margin-bottom:8px; font-weight:700; font-size:0.95rem;">
+                                        <i class="fab fa-instagram" style="color:#e1306c;"></i>
+                                        لینک پیج اینستاگرام
+                                    </label>
+                                    <input type="url" class="input-field" id="inputInstagram" placeholder="https://instagram.com/page" dir="ltr">
+                                </div>
+
+                                <div style="padding-top:8px;">
+                                    <button class="btn-yellow" onclick="saveSocials()" style="width:100%; padding:14px; font-size:1rem;">
+                                        <i class="fas fa-save" style="margin-left:8px;"></i>ذخیره لینک‌ها
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- تب مدیریت اخبار -->
+                    <div class="admin-tab" id="newsTab">
+                        <!-- فرم افزودن خبر -->
+                        <div class="glass-card" style="padding:32px; margin-bottom:24px; cursor:default;" onmouseenter="this.style.transform='none'" onmouseleave="this.style.transform='none'">
+                            <h2 style="font-size:1.3rem; font-weight:900; margin-bottom:24px;">
+                                <i class="fas fa-plus-circle" style="color:var(--yellow-accent); margin-left:10px;"></i>افزودن خبر جدید
+                            </h2>
+
+                            <div style="display:flex; flex-direction:column; gap:16px;">
+                                <div>
+                                    <label style="display:block; margin-bottom:8px; font-weight:700; font-size:0.95rem;">عنوان خبر</label>
+                                    <input type="text" class="input-field" id="newsTitle" placeholder="عنوان خبر را وارد کنید">
+                                </div>
+                                <div>
+                                    <label style="display:block; margin-bottom:8px; font-weight:700; font-size:0.95rem;">متن خبر</label>
+                                    <textarea class="input-field" id="newsBody" placeholder="متن کامل خبر را وارد کنید..."></textarea>
+                                </div>
+                                <div>
+                                    <label style="display:block; margin-bottom:8px; font-weight:700; font-size:0.95rem;">دسته‌بندی</label>
+                                    <input type="text" class="input-field" id="newsCategory" placeholder="مثلاً: سیاسی، ورزشی، تکنولوژی">
+                                </div>
+                                <button class="btn-yellow" onclick="addNews()" style="padding:14px; font-size:1rem;">
+                                    <i class="fas fa-paper-plane" style="margin-left:8px;"></i>انتشار خبر
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- لیست اخبار -->
+                        <div class="glass-card" style="padding:32px; cursor:default;" onmouseenter="this.style.transform='none'" onmouseleave="this.style.transform='none'">
+                            <h2 style="font-size:1.3rem; font-weight:900; margin-bottom:24px;">
+                                <i class="fas fa-list" style="color:var(--yellow-accent); margin-left:10px;"></i>لیست اخبار
+                                <span id="newsCount" style="font-size:0.85rem; color:var(--text-muted); font-weight:400; margin-right:8px;"></span>
+                            </h2>
+                            <div id="adminNewsList">
+                                <!-- لیست اخبار در پنل -->
+                            </div>
+                            <div id="adminNoNews" style="display:none; text-align:center; padding:30px;">
+                                <i class="fas fa-inbox" style="font-size:2rem; color:var(--purple-mid); margin-bottom:10px;"></i>
+                                <p style="color:var(--text-muted);">هنوز خبری ثبت نشده</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال ورود -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-box">
+            <div style="text-align:center; margin-bottom:24px;">
+                <div style="width:60px; height:60px; border-radius:16px; background:linear-gradient(135deg, var(--purple-mid), var(--yellow-accent)); display:inline-flex; align-items:center; justify-content:center; margin-bottom:16px;">
+                    <i class="fas fa-shield-alt" style="font-size:1.5rem; color:white;"></i>
+                </div>
+                <h3 style="font-size:1.3rem; font-weight:900;">ورود به پنل مدیریت</h3>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-top:6px;">رمز عبور خود را وارد کنید</p>
+            </div>
+            <div style="margin-bottom:20px;">
+                <input type="password" class="input-field" id="loginPassword" placeholder="رمز عبور..." onkeydown="if(event.key==='Enter')doLogin()">
+            </div>
+            <div id="loginError" style="display:none; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; padding:10px 16px; border-radius:10px; font-size:0.9rem; margin-bottom:16px; text-align:center;">
+                <i class="fas fa-exclamation-triangle" style="margin-left:6px;"></i>رمز عبور اشتباه است
+            </div>
+            <div style="display:flex; gap:12px;">
+                <button class="btn-yellow" onclick="doLogin()" style="flex:1; padding:12px;">
+                    <i class="fas fa-sign-in-alt" style="margin-left:6px;"></i>ورود
+                </button>
+                <button class="btn-outline" onclick="hideLoginModal()" style="padding:12px 20px;">انصراف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- تست -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // === رمز عبور پنل مدیریت ===
+        const ADMIN_PASSWORD = '11111111aa11';
+
+        // === ساخت ذرات شناور ===
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = (8 + Math.random() * 12) + 's';
+                p.style.animationDelay = (Math.random() * 10) + 's';
+                p.style.width = p.style.height = (2 + Math.random() * 3) + 'px';
+                // بعضی ذرات بنفش
+                if (Math.random() > 0.6) {
+                    p.style.background = 'var(--purple-light)';
+                }
+                container.appendChild(p);
+            }
+        }
+        createParticles();
+
+        // === اسکرول نوار بالایی ===
+        window.addEventListener('scroll', () => {
+            document.getElementById('topBar').classList.toggle('scrolled', window.scrollY > 30);
+        });
+
+        // === انیمیشن ورود عناصر ===
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // === اسکرول به بخش ===
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // === تست ===
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerHTML = '<i class="fas fa-check-circle" style="margin-left:8px; color:var(--yellow-accent);"></i>' + msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // === مودال ورود ===
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginError').style.display = 'none';
+            setTimeout(() => document.getElementById('loginPassword').focus(), 100);
+        }
+
+        function hideLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        // بستن مودال با کلیک بیرون
+        document.getElementById('loginModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) hideLoginModal();
+        });
+
+        // === ورود ===
+        function doLogin() {
+            const pass = document.getElementById('loginPassword').value;
+            if (pass === ADMIN_PASSWORD) {
+                hideLoginModal();
+                enterAdmin();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+                document.getElementById('loginPassword').value = '';
+                document.getElementById('loginPassword').focus();
+            }
+        }
+
+        // === ورود به پنل ===
+        function enterAdmin() {
+            document.getElementById('mainSite').classList.add('hidden');
+            document.getElementById('adminPanel').classList.add('active');
+            document.getElementById('navNewsBtn').style.display = 'none';
+            document.getElementById('navSocialBtn').style.display = 'none';
+            document.getElementById('adminBtn').style.display = 'none';
+            window.scrollTo(0, 0);
+            loadSocialsToForm();
+            renderAdminNews();
+            showToast('به پنل مدیریت خوش آمدید');
+        }
+
+        // === خروج از پنل ===
+        function exitAdmin() {
+            document.getElementById('adminPanel').classList.remove('active');
+            document.getElementById('mainSite').classList.remove('hidden');
+            document.getElementById('navNewsBtn').style.display = '';
+            document.getElementById('navSocialBtn').style.display = '';
+            document.getElementById('adminBtn').style.display = '';
+            window.scrollTo(0, 0);
+            renderNews();
+            loadSocials();
+        }
+
+        // === تب‌های پنل ===
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.admin-sidebar-item').forEach(s => s.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            el.classList.add('active');
+        }
+
+        // ============================
+        // === مدیریت لینک‌های اجتماعی ===
+        // ============================
+
+        function getSocials() {
+            const data = localStorage.getItem('site_socials');
+            return data ? JSON.parse(data) : {
+                youtube: '',
+                telegram: '',
+                instagram: ''
+            };
+        }
+
+        function saveSocials() {
+            const socials = {
+                youtube: document.getElementById('inputYoutube').value.trim(),
+                telegram: document.getElementById('inputTelegram').value.trim(),
+                instagram: document.getElementById('inputInstagram').value.trim()
+            };
+            localStorage.setItem('site_socials', JSON.stringify(socials));
+            showToast('لینک‌های شبکه‌های اجتماعی ذخیره شد');
+        }
+
+        function loadSocialsToForm() {
+            const s = getSocials();
+            document.getElementById('inputYoutube').value = s.youtube;
+            document.getElementById('inputTelegram').value = s.telegram;
+            document.getElementById('inputInstagram').value = s.instagram;
+        }
+
+        function loadSocials() {
+            const s = getSocials();
+            document.getElementById('socialYoutube').href = s.youtube || '#';
+            document.getElementById('socialTelegram').href = s.telegram || '#';
+            document.getElementById('socialInstagram').href = s.instagram || '#';
+        }
+
+        // ============================
+        // === مدیریت اخبار ===
+        // ============================
+
+        function getNews() {
+            const data = localStorage.getItem('site_news');
+            return data ? JSON.parse(data) : [];
+        }
+
+        function addNews() {
+            const title = document.getElementById('newsTitle').value.trim();
+            const body = document.getElementById('newsBody').value.trim();
+            const category = document.getElementById('newsCategory').value.trim();
+
+            if (!title) {
+                showToast('لطفا عنوان خبر را وارد کنید');
+                document.getElementById('newsTitle').focus();
+                return;
+            }
+            if (!body) {
+                showToast('لطفا متن خبر را وارد کنید');
+                document.getElementById('newsBody').focus();
+                return;
+            }
+
+            const news = getNews();
+            news.unshift({
+                id: Date.now(),
+                title: title,
+                body: body,
+                category: category || 'عمومی',
+                date: new Date().toLocaleDateString('fa-IR')
+            });
+
+            localStorage.setItem('site_news', JSON.stringify(news));
+
+            document.getElementById('newsTitle').value = '';
+            document.getElementById('newsBody').value = '';
+            document.getElementById('newsCategory').value = '';
+
+            renderAdminNews();
+            showToast('خبر جدید با موفقیت منتشر شد');
+        }
+
+        function deleteNews(id) {
+            let news = getNews();
+            news = news.filter(n => n.id !== id);
+            localStorage.setItem('site_news', JSON.stringify(news));
+            renderAdminNews();
+            showToast('خبر حذف شد');
+        }
+
+        // رندر اخبار در سایت اصلی
+        function renderNews() {
+            const news = getNews();
+            const container = document.getElementById('newsContainer');
+            const noMsg = document.getElementById('noNewsMsg');
+            const statEl = document.getElementById('statNews');
+
+            // انیمیشن شمارنده
+            animateNumber(statEl, news.length);
+
+            if (news.length === 0) {
+                container.innerHTML = '';
+                noMsg.style.display = 'block';
+                return;
+            }
+
+            noMsg.style.display = 'none';
+            container.innerHTML = news.map((n, i) => `
+                <article class="glass-card news-card fade-up" style="padding:28px; transition-delay:${i * 0.08}s;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                        <span class="news-badge">${escapeHtml(n.category)}</span>
+                        <span class="news-date"><i class="fas fa-calendar-alt" style="margin-left:4px;"></i>${n.date}</span>
+                    </div>
+                    <h3 style="font-size:1.15rem; font-weight:900; margin-bottom:10px; line-height:1.6;">${escapeHtml(n.title)}</h3>
+                    <p style="color:var(--text-muted); font-size:0.92rem; line-height:1.8;">${escapeHtml(n.body)}</p>
+                </article>
+            `).join('');
+
+            // مشاهده مجدد عناصر جدید
+            container.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        }
+
+        // رندر اخبار در پنل مدیریت
+        function renderAdminNews() {
+            const news = getNews();
+            const list = document.getElementById('adminNewsList');
+            const noMsg = document.getElementById('adminNoNews');
+            const countEl = document.getElementById('newsCount');
+
+            countEl.textContent = `(${news.length} خبر)`;
+
+            if (news.length === 0) {
+                list.innerHTML = '';
+                noMsg.style.display = 'block';
+                return;
+            }
+
+            noMsg.style.display = 'none';
+            list.innerHTML = news.map(n => `
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:16px; background:rgba(26,10,46,0.5); border:1px solid var(--card-border); border-radius:14px; margin-bottom:12px; gap:12px; flex-wrap:wrap;">
+                    <div style="flex:1; min-width:200px;">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                            <span class="news-badge" style="font-size:0.7rem; padding:2px 10px;">${escapeHtml(n.category)}</span>
+                            <span class="news-date">${n.date}</span>
+                        </div>
+                        <h4 style="font-weight:700; font-size:0.95rem;">${escapeHtml(n.title)}</h4>
+                    </div>
+                    <button class="btn-danger" onclick="deleteNews(${n.id})">
+                        <i class="fas fa-trash-alt" style="margin-left:4px;"></i>حذف
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // === جلوگیری از XSS ===
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // === انیمیشن عدد ===
+        function animateNumber(el, target) {
+            let current = 0;
+            const step = Math.max(1, Math.ceil(target / 30));
+            const interval = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(interval);
+                }
+                el.textContent = current;
+            }, 40);
+        }
+
+        // === بارگذاری اولیه ===
+        loadSocials();
+        renderNews();
+
+        // === اگر خبری نبود، اخبار پیش‌فرض اضافه کن ===
+        if (getNews().length === 0) {
+            const defaultNews = [
+                {
+                    id: 1,
+                    title: 'راه‌اندازی رسمی پورتال خبری',
+                    body: 'با افتخار اعلام می‌کنیم که پورتال خبری ما رسماً فعالیت خود را آغاز کرد. هدف ما ارائه به‌روزترین اخبار و تحلیل‌های دقیق به شما کاربران عزیز است.',
+                    category: 'عمومی',
+                    date: new Date().toLocaleDateString('fa-IR')
+                },
+                {
+                    id: 2,
+                    title: 'افزایش تعامل در شبکه‌های اجتماعی',
+                    body: 'از این پس می‌توانید از طریق کانال یوتیوب، تلگرام و اینستاگرام ما را دنبال کنید و از محتوای ویدیویی و متنی بهره‌مند شوید.',
+                    category: 'فناوری',
+                    date: new Date().toLocaleDateString('fa-IR')
+                },
+                {
+                    id: 3,
+                    title: 'برنامه‌های آینده برای توسعه سایت',
+                    body: 'در آینده نزدیک امکانات جدیدی مانند بخش نظرات، سیستم جستجو و دسته‌بندی پیشرفته اخبار به سایت اضافه خواهد شد.',
+                    category: 'توسعه',
+                    date: new Date().toLocaleDateString('fa-IR')
+                }
+            ];
+            localStorage.setItem('site_news', JSON.stringify(defaultNews));
+            renderNews();
+        }
+    </script>
+</body>
+</html>
